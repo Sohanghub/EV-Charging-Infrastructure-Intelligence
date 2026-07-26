@@ -108,8 +108,8 @@ export function GapAnalysisChart({ allocations }: { allocations: Allocation[] })
 
   return (
     <ChartFrame
-      title="Capacity gap, before and after"
-      description="Charging points still short of one per 250 registered EVs."
+      title="Energy shortfall, before and after"
+      description="Unmet public charging demand in kWh/day, against the same demand once the funded stations are delivering."
       height="h-[30rem]"
     >
       <ResponsiveContainer width="100%" height="100%">

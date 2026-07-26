@@ -40,6 +40,10 @@ says the opposite, and the two answers are not close.
 | **13.6 points per 1,000 EVs** — 3.4× the 1-per-250 benchmark | Surplus  ✅ |
 | **1.64 M kWh/day of unmet demand** — demand at 1.71× deliverable supply | Deficit  ❌ |
 
+![Every city plotted by fleet size against charging points per 1,000 EVs, with the adequacy benchmark drawn as a reference line](public/chart-coverage.png)
+
+<sub>All 100 cities, log fleet size against coverage. Almost every city clears the dashed benchmark — yet the red and amber points, coloured by demand-to-supply ratio, are the ones already short on energy. Coverage and adequacy disagree.</sub>
+
 Per-vehicle coverage treats an e-2W and an e-rickshaw as one unit of demand each. India's
 fleet is not built that way. A three-wheeler on a commercial duty cycle draws roughly **42×**
 the public charging energy of a two-wheeler, so in a fleet that is 42% three-wheelers the
@@ -85,6 +89,10 @@ between bands, and that movement is the point of the interface.
 | 🔴 Demand over 2× supply      |                            27 |
 | 🟠 Demand exceeds supply      |                            32 |
 | 🟢 Supply covers demand       |                            41 |
+
+![Horizontal bar chart of the ten cities with the largest daily energy shortfall, led by Lucknow](public/chart-top-cities.png)
+
+<sub>The ranking the model produces. Uttar Pradesh takes four of the top ten — a large three-wheeler fleet against thin installed capacity, which per-vehicle coverage alone would not have surfaced.</sub>
 
 Every threshold, rate, cap and bound lives in [lib/constants.ts](lib/constants.ts). Nothing
 else hard-codes a number.
@@ -157,6 +165,10 @@ at that floor, break-even share is 0.78, not 0.38. That corner is unlikely but l
 The Explore page exposes the public-share assumption as four live sliders, one per vehicle class.
 Everything rescores on every move: the map, the charts, the table and the severity bands.
 
+![Four sliders setting the public charging share per vehicle class, with the three-wheeler break-even threshold called out below](public/chart-sliders.png)
+
+<sub>The assumption is a control, not a constant. Each slider reports the resulting per-vehicle draw in kWh/day next to the 1.99 kWh/day national break-even, so the reader can see exactly how far the default sits from flipping the sign.</sub>
+
 ## Recommendations
 
 Set a budget between 25 and 1,000 stations. Each station is a fixed 4-point site — 2 DC fast at
@@ -176,6 +188,11 @@ At the default of 250 stations:
 |    3 | New Delhi | Delhi         |       28 | 2,37,408 kWh/day |
 |    4 | Patna     | Bihar         |       26 | 2,23,127 kWh/day |
 |    5 | Guwahati  | Assam         |       24 | 1,97,966 kWh/day |
+
+| Where the funded points land                                     | What they close                                              |
+| ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| ![Stacked bar chart of funded charging points on top of each city's existing points](public/chart-allocation.png) | ![Paired bar chart of each city's energy shortfall before and after the funded build](public/chart-gap.png) |
+| Funded points stacked on existing capacity. Dwarka and Rohini are almost entirely new build; Mumbai gets a token allocation against a large existing estate. | The same cities' shortfall before and after. The bars barely move, and that is the finding — 250 stations is small against a 1.64 M kWh/day national gap. |
 
 Those 250 stations deliver **1,51,920 kWh/day**, closing 7.4% of the funded cities' shortfall
 weighted by allocation — about 9% of the national gap. The honest reading of that number is that
