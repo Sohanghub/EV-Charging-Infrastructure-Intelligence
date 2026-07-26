@@ -47,14 +47,14 @@ export const VEHICLE_CLASS_LABELS: Record<VehicleClass, string> = {
 
 /**
  * Duty cycle per class. The three-wheeler figures — 90 km/day at 0.06 kWh/km —
- * come from the project config and are the ones that matter: three-wheelers are
- * 51% of the fleet and carry 92.2% of modelled public demand. Vahan records
- * 99.9% of them as transport registrations, so 90 km/day reads as a floor for a
- * commercial duty cycle rather than a central estimate.
+ * are the ones that matter: three-wheelers are 42% of the modelled fleet and
+ * carry 92.2% of modelled public demand. Vahan records 99.9% of them as
+ * transport registrations, so 90 km/day reads as a floor for a commercial duty
+ * cycle rather than a central estimate.
  *
- * The authoritative table lives in the planning docs, not this repo. These
- * values reproduce the published per-vehicle public draw exactly; reconcile
- * them against the source before quoting any figure but the 3W one.
+ * The other three classes are assumptions, not measurements, and only move the
+ * national result by a few percent between them. Treat any figure but the 3W one
+ * as indicative.
  */
 export const KM_PER_DAY: Record<VehicleClass, number> = {
   ev_2w: 30,

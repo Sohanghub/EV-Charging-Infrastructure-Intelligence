@@ -28,8 +28,6 @@ demand.
 
 ![EVIP — national view of the charging shortfall](public/screenshot.png)
 
-<div align="center"><sub>Home page, light theme. Replace <code>public/screenshot.png</code> with your own capture at any time.</sub></div>
-
 ---
 
 ## The finding

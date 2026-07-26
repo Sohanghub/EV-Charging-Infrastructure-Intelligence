@@ -1,4 +1,0 @@
-[out:json][timeout:120];
-area["ISO3166-1"="IN"][admin_level=2]->.in;
-nwr["amenity"="charging_station"](area.in);
-out tags center;

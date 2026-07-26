@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# local planning notes and scratch queries — not part of the shipped project
+ECII_SPEC.md
+INGEST_DATA_EVIP.md
+q.txt
+osm.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*

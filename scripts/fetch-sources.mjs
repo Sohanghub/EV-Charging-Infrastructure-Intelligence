@@ -21,9 +21,9 @@ const API_KEY =
   "579b464db66ec23bdd000001cdd3946e44ce4aad7209ff7b23ac571b";
 
 /**
- * The three data.gov.in resources that survived verification. Every other
- * charging dataset on the portal is a parliamentary answer table at state
- * resolution or coarser — see SOURCES.md for what was rejected and why.
+ * The data.gov.in resources that survived verification. Every other charging
+ * dataset on the portal turned out to be a parliamentary answer table at state
+ * resolution or coarser, with no city breakdown to build on.
  */
 const RESOURCES = {
   mop_charging_stations: {
