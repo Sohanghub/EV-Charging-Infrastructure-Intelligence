@@ -1,0 +1,289 @@
+{
+  "_fetched": "2026-07-26T06:17:32.807Z",
+  "_source": "https://api.data.gov.in/resource/729dd0fe-a438-49eb-9766-9cdb0ea4b4e2",
+  "title": "State/UT-wise Total Number of Electric Vehicles (EVs) Registered as Percentage of the Total Number of Vehicles Registered from 2019-20 to 2023-24",
+  "updated_date": "2025-03-05T12:33:47Z",
+  "field": [
+    {
+      "id": "sl__no_",
+      "name": "Sl. No.",
+      "type": "keyword"
+    },
+    {
+      "id": "state__ut",
+      "name": "State/ UT",
+      "type": "keyword"
+    },
+    {
+      "id": "total_ev",
+      "name": "Total EV",
+      "type": "double"
+    },
+    {
+      "id": "total_vehicles_sold",
+      "name": "Total Vehicles Sold",
+      "type": "double"
+    },
+    {
+      "id": "__of_share_of_ev_in_total_vehicles_sold",
+      "name": "% of Share of EV in Total Vehicles Sold",
+      "type": "double"
+    }
+  ],
+  "rid": "729dd0fe-a438-49eb-9766-9cdb0ea4b4e2",
+  "total": 36,
+  "records": [
+    {
+      "sl__no_": "1",
+      "state__ut": "Uttar Pradesh",
+      "total_ev": 665247,
+      "total_vehicles_sold": 15317699,
+      "__of_share_of_ev_in_total_vehicles_sold": 4.34
+    },
+    {
+      "sl__no_": "2",
+      "state__ut": "Maharashtra",
+      "total_ev": 439358,
+      "total_vehicles_sold": 11055082,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.97
+    },
+    {
+      "sl__no_": "3",
+      "state__ut": "Karnataka",
+      "total_ev": 350810,
+      "total_vehicles_sold": 7315250,
+      "__of_share_of_ev_in_total_vehicles_sold": 4.8
+    },
+    {
+      "sl__no_": "4",
+      "state__ut": "Tamil Nadu",
+      "total_ev": 228850,
+      "total_vehicles_sold": 8476042,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.7
+    },
+    {
+      "sl__no_": "5",
+      "state__ut": "Rajasthan",
+      "total_ev": 233503,
+      "total_vehicles_sold": 6490725,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.6
+    },
+    {
+      "sl__no_": "6",
+      "state__ut": "Bihar",
+      "total_ev": 214921,
+      "total_vehicles_sold": 5763437,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.73
+    },
+    {
+      "sl__no_": "7",
+      "state__ut": "Delhi",
+      "total_ev": 216084,
+      "total_vehicles_sold": 2799571,
+      "__of_share_of_ev_in_total_vehicles_sold": 7.72
+    },
+    {
+      "sl__no_": "8",
+      "state__ut": "Gujarat",
+      "total_ev": 191185,
+      "total_vehicles_sold": 7450473,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.57
+    },
+    {
+      "sl__no_": "9",
+      "state__ut": "Madhya Pradesh",
+      "total_ev": 144782,
+      "total_vehicles_sold": 6812437,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.13
+    },
+    {
+      "sl__no_": "10",
+      "state__ut": "Kerala",
+      "total_ev": 151029,
+      "total_vehicles_sold": 3781393,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.99
+    },
+    {
+      "sl__no_": "11",
+      "state__ut": "Assam",
+      "total_ev": 150617,
+      "total_vehicles_sold": 2599986,
+      "__of_share_of_ev_in_total_vehicles_sold": 5.79
+    },
+    {
+      "sl__no_": "12",
+      "state__ut": "Odisha",
+      "total_ev": 97056,
+      "total_vehicles_sold": 3355237,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.89
+    },
+    {
+      "sl__no_": "13",
+      "state__ut": "Andhra Pradesh",
+      "total_ev": 88534,
+      "total_vehicles_sold": 4772995,
+      "__of_share_of_ev_in_total_vehicles_sold": 1.85
+    },
+    {
+      "sl__no_": "14",
+      "state__ut": "Chhattisgarh",
+      "total_ev": 80348,
+      "total_vehicles_sold": 2656935,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.02
+    },
+    {
+      "sl__no_": "15",
+      "state__ut": "Haryana",
+      "total_ev": 81775,
+      "total_vehicles_sold": 3703954,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.21
+    },
+    {
+      "sl__no_": "16",
+      "state__ut": "West Bengal",
+      "total_ev": 69220,
+      "total_vehicles_sold": 5099551,
+      "__of_share_of_ev_in_total_vehicles_sold": 1.36
+    },
+    {
+      "sl__no_": "17",
+      "state__ut": "Punjab",
+      "total_ev": 56459,
+      "total_vehicles_sold": 2973281,
+      "__of_share_of_ev_in_total_vehicles_sold": 1.9
+    },
+    {
+      "sl__no_": "18",
+      "state__ut": "Jharkhand",
+      "total_ev": 47400,
+      "total_vehicles_sold": 2545053,
+      "__of_share_of_ev_in_total_vehicles_sold": 1.86
+    },
+    {
+      "sl__no_": "19",
+      "state__ut": "Uttarakhand",
+      "total_ev": 48522,
+      "total_vehicles_sold": 1120010,
+      "__of_share_of_ev_in_total_vehicles_sold": 4.33
+    },
+    {
+      "sl__no_": "20",
+      "state__ut": "Jammu and Kashmir",
+      "total_ev": 19099,
+      "total_vehicles_sold": 823164,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.32
+    },
+    {
+      "sl__no_": "21",
+      "state__ut": "Goa",
+      "total_ev": 20330,
+      "total_vehicles_sold": 323748,
+      "__of_share_of_ev_in_total_vehicles_sold": 6.28
+    },
+    {
+      "sl__no_": "22",
+      "state__ut": "Tripura",
+      "total_ev": 20113,
+      "total_vehicles_sold": 264004,
+      "__of_share_of_ev_in_total_vehicles_sold": 7.62
+    },
+    {
+      "sl__no_": "23",
+      "state__ut": "Chandigarh",
+      "total_ev": 12375,
+      "total_vehicles_sold": 219391,
+      "__of_share_of_ev_in_total_vehicles_sold": 5.64
+    },
+    {
+      "sl__no_": "24",
+      "state__ut": "Puducherry",
+      "total_ev": 5933,
+      "total_vehicles_sold": 252488,
+      "__of_share_of_ev_in_total_vehicles_sold": 2.35
+    },
+    {
+      "sl__no_": "25",
+      "state__ut": "Himachal Pradesh",
+      "total_ev": 3043,
+      "total_vehicles_sold": 636556,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.48
+    },
+    {
+      "sl__no_": "26",
+      "state__ut": "Manipur",
+      "total_ev": 1273,
+      "total_vehicles_sold": 168310,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.76
+    },
+    {
+      "sl__no_": "27",
+      "state__ut": "Meghalaya",
+      "total_ev": 572,
+      "total_vehicles_sold": 162249,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.35
+    },
+    {
+      "sl__no_": "28",
+      "state__ut": "Mizoram",
+      "total_ev": 344,
+      "total_vehicles_sold": 136845,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.25
+    },
+    {
+      "sl__no_": "29",
+      "state__ut": "Dadra and Nagar Haveli and Daman and Diu",
+      "total_ev": 468,
+      "total_vehicles_sold": 90571,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.52
+    },
+    {
+      "sl__no_": "30",
+      "state__ut": "Andaman and Nicobar Islands",
+      "total_ev": 191,
+      "total_vehicles_sold": 35896,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.53
+    },
+    {
+      "sl__no_": "31",
+      "state__ut": "Ladakh",
+      "total_ev": 88,
+      "total_vehicles_sold": 19645,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.45
+    },
+    {
+      "sl__no_": "32",
+      "state__ut": "Arunachal Pradesh",
+      "total_ev": 42,
+      "total_vehicles_sold": 137145,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.03
+    },
+    {
+      "sl__no_": "33",
+      "state__ut": "Nagaland",
+      "total_ev": 27,
+      "total_vehicles_sold": 119281,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.02
+    },
+    {
+      "sl__no_": "34",
+      "state__ut": "Lakshadweep",
+      "total_ev": 19,
+      "total_vehicles_sold": 2752,
+      "__of_share_of_ev_in_total_vehicles_sold": 0.69
+    },
+    {
+      "sl__no_": "35",
+      "state__ut": "Sikkim",
+      "total_ev": "NA",
+      "total_vehicles_sold": 49884,
+      "__of_share_of_ev_in_total_vehicles_sold": "0"
+    },
+    {
+      "sl__no_": "Total",
+      "state__ut": "Total",
+      "total_ev": 3639617,
+      "total_vehicles_sold": 107531040,
+      "__of_share_of_ev_in_total_vehicles_sold": 3.38
+    }
+  ]
+}

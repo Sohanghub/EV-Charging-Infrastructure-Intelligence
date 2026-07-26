@@ -1,0 +1,133 @@
+{
+  "data_sources": [
+    {
+      "name": "Ministry of Power — State/UT-wise EV charging stations installed, as on 01-03-2025",
+      "url": "https://api.data.gov.in/resource/34609614-1e3f-4fc6-b5c5-e05f1c8ec362",
+      "note": "Fetched at build time from data.gov.in. 37 rows, one per state/UT. The national total of 25,852 public charging stations is the sole source of every supply figure in this application."
+    },
+    {
+      "name": "Vahan — State/UT-wise total registered electric vehicles",
+      "url": "https://api.data.gov.in/resource/729dd0fe-a438-49eb-9766-9cdb0ea4b4e2",
+      "note": "Cumulative registered EV stock by state, 3.64 million nationally. Sets the demand level for every city. Telangana is absent from this table and is imputed."
+    },
+    {
+      "name": "Vahan — State/UT-wise EVs registered by year, 2020 to 2023",
+      "url": "https://api.data.gov.in/resource/acf1f1b0-265b-4693-b58b-4ffc62b8101c",
+      "note": "Source of the year-on-year growth rate, computed 2022 to 2023. Real rates range from -1.5% in Uttarakhand to +75.7% in Kerala. A CAGR from the 2020 base was rejected: it reads as 100-300% for every state and describes the pandemic rather than the present."
+    },
+    {
+      "name": "Vahan — State/UT-wise EVs registered by vehicle class",
+      "url": "https://api.data.gov.in/resource/4596d19c-fdfc-4bec-99d2-99e64f9ae3b1",
+      "note": "Class-coded registrations. Supplies the two-, three-, four-wheeler and bus split. Its national total is an older vintage than the stock table, so only the shares are used, applied to the current stock level."
+    },
+    {
+      "name": "OpenStreetMap — amenity=charging_station across India",
+      "url": "https://overpass-api.de/api/interpreter",
+      "note": "657 individually geolocated stations, fetched via Overpass. The only per-station source that exists for India. Too sparse to set supply levels, but it is the sole real signal for how supply is distributed between cities within a state, and its capacity and socket tags supply the points-per-station and DC-fast shares."
+    },
+    {
+      "name": "Central Electricity Authority — renewable generation mix",
+      "url": "https://cea.nic.in/",
+      "note": "State-level grid renewable share. Applied unchanged to every city in a state; no city-level variation is claimed."
+    },
+    {
+      "name": "Natural Earth — admin-1 states and provinces (1:10m)",
+      "url": "https://www.naturalearthdata.com/",
+      "note": "Public-domain boundary geometry. Simplified to ~1 km precision and bundled as data/india-states.json (GeoJSON, stored with a .json extension so it needs no bundler loader)."
+    },
+    {
+      "name": "CARTO basemaps on OpenStreetMap data",
+      "url": "https://carto.com/attributions",
+      "note": "Raster map tiles. The only runtime network dependency in the application."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Reported, modelled, imputed",
+      "definition": "The three provenance tiers carried on every city row. Reported means published at that resolution and used unchanged. Modelled means a published state total split across that state's cities. Imputed means the state total itself was estimated. No city figure in this dataset is reported, because India does not publish charging or registration data at city level."
+    },
+    {
+      "term": "Charging point",
+      "definition": "A single connector a vehicle plugs into. This is the atomic unit of supply throughout the platform. The Ministry publishes stations, not points; the conversion uses a factor of 2, the median capacity tag across the 133 OSM stations in India that carry one."
+    },
+    {
+      "term": "Station",
+      "definition": "A physical site containing one or more charging points. A funded station in the investment model is a fixed 4-point site: 2 DC fast points and 2 AC points."
+    },
+    {
+      "term": "Public chargers",
+      "definition": "The estimated count of public charging points in a city, of every type. Not a count of sites."
+    },
+    {
+      "term": "Fast chargers",
+      "definition": "The subset of public chargers rated at 50 kW DC or above, taken as 21.4% of points — the share of the 28 OSM stations in India carrying a socket output tag that meet the threshold. Because it is a subset, it is never added to the public charger count."
+    },
+    {
+      "term": "Energy deficit",
+      "definition": "Public charging energy a city's fleet demands per day, less what its installed capacity can deliver. Measured in kWh/day and used as the priority ranking. This replaced a count-based capacity gap; the two disagree about whether India has a charging shortage at all."
+    },
+    {
+      "term": "Break-even draw",
+      "definition": "The 1.99 kWh/day per electric three-wheeler marked on the Explore slider. It is one slice through a two-parameter surface, not a general threshold: it is the draw at which national demand equals supply with the fleet held at its central estimate. Break-even is really a product of fleet and share — at the December 2022 fleet floor the same balance needs about 4.2 kWh/day, more than twice as much. Aggregating the shipping city model puts the central-fleet figure at 2.07 rather than 1.99; the slider marker has not been re-derived since the inputs were last rebuilt. Published in energy rather than as a share of daily consumption because a share needs an assumed daily total and that denominator silently decides the answer."
+    },
+    {
+      "term": "Crossover year",
+      "definition": "Years until a city's compounding demand overtakes its supply. Zero means already short. A city whose registrations are falling never crosses, and is labelled as such rather than left blank."
+    },
+    {
+      "term": "Adequacy benchmark (retired)",
+      "definition": "One public charging point per 250 registered EVs. No longer used for ranking or banding. Against real data India sits at roughly 14 points per 1,000 EVs nationally, so it classified 94 of 100 cities as adequately served — a result driven entirely by counting an e-2W and an e-bus as one unit of demand each."
+    },
+    {
+      "term": "Urban share",
+      "definition": "The 61.9% of India's OSM-mapped charging stations that fall within 25 km of one of the 100 cities modelled here. Charging infrastructure is far more urban-concentrated than population is; this measures the concentration instead of assuming it."
+    }
+  ],
+  "scoring_weights": [
+    {
+      "term": "Priority = demand kWh/day − supply kWh/day, floored at zero",
+      "rationale": "The unmet energy itself. The previous score multiplied a points-per-EV base by queue, density and population factors, all of which existed to compensate for a base with no physical meaning. A daily energy shortfall needs no such correction: it already scales with fleet size and already reflects how badly served a city is. A city in surplus scores zero rather than negative — spare capacity is not anti-priority, it is simply no claim on the next station."
+    },
+    {
+      "term": "Demand = Σ class fleet × daily kWh × public share",
+      "rationale": "Four vehicle classes, each with its own duty cycle and public-charging share. This is the change that decides the answer: a three-wheeler draws about 42 times the public energy of a two-wheeler, so counting vehicles rather than energy reported a national surplus where counting energy reports a deficit."
+    },
+    {
+      "term": "Supply = installed kW × 24 h × 20% utilisation",
+      "rationale": "Installed capacity is built from two rates rather than a blend — DC points at 60 kW and AC at 3.3 kW, both medians of the OpenStreetMap sockets that carry a rating. A funded station's DC pair carries roughly 95% of its capacity, so pricing a build in points rather than kW would misstate it badly."
+    },
+    {
+      "term": "Growth appears only in the projection, never in the score",
+      "rationale": "Demand compounds as D(t) = D(0)(1+g)^t and the crossover year is the first year it overtakes supply. Growth was previously a multiplicand in the priority score, where Uttarakhand's real −1.5% inverted the ranking of four cities and Andhra Pradesh's 0.3% annihilated genuine deficits. In the projection a shrinking fleet simply never crosses, which is a finding rather than a distortion."
+    },
+    {
+      "term": "Severity bands are fixed ratios, not percentiles",
+      "rationale": "Supply covers demand below 1.0x, demand exceeds supply from 1.0x, critical at 2.0x or above. Both cut points are physical rather than distributional. Fixed bands mean the public-share sliders move cities between them, and that movement is the deliverable — percentiles would hold band sizes constant and hide the sensitivity the model exists to show."
+    }
+  ],
+  "assumptions": [
+    "City figures are a real state total multiplied by an urban share and then split between that state's cities. Supply is split using OpenStreetMap station counts where a state has enough mapped stations to be believed, and by population where it does not; the blend weight is n/(n+20), so a state with 40 mapped stations leans two-thirds on OSM and one with 2 leans almost entirely on population.",
+    "Demand has no equivalent intra-state signal, so registrations are split by population share alone. This assumes EV ownership within a state tracks population, which is wrong in a knowable direction: metros over-index.",
+    "The same urban share is applied to both supply and demand. That makes the aggregate coverage of these 100 cities equal the national figure by construction, so only relative differences between cities carry information. It also understates urban demand, because two-wheelers are distributed more like population than charging stations are.",
+    "Utilization, queue length and daily session counts have been removed from the dataset entirely. No source publishes them, they were previously generated, and every figure that depended on them is now computed from energy instead.",
+    "Duty cycles are 30 km/day for two-wheelers, 90 for three-wheelers, 40 for four-wheelers and 150 for buses, at 0.03, 0.06, 0.164 and 1.2 kWh/km. The three-wheeler pair is the one that matters — three-wheelers are 51% of the fleet and 92.2% of modelled demand — and Vahan records 99.9% of them as transport registrations, so 90 km/day reads as a floor for a commercial duty cycle rather than a central estimate. That makes duty cycle a third axis of the same shape as the fleet-times-share product: break-even is really fleet × share × kWh/day. Because 90 km/day is a floor rather than a central estimate, moving it can only push toward deficit, never away, which is why the sign table varies the other two.",
+    "One funded station equals exactly 4 charging points, split 2 DC fast and 2 AC, and is priced at 60 kW and 3.3 kW per point respectively. Impact arithmetic converts stations to kW and then to kWh/day, never to a bare point count.",
+    "The public-charging share of each class's energy is a live control, not a fixed value. Its defaults are 10% for two-wheelers, 70% for three-wheelers, 20% for four-wheelers and 10% for buses. Nobody has measured any of them, and the three-wheeler figure is the one the national result turns on.",
+    "Stations are allocated across the 15 highest-priority cities using the largest-remainder method, with a floor of one station per city. Allocations are whole numbers and always sum to exactly the funded total.",
+    "Waiting time is modelled as inversely proportional to the square root of capacity: new queue = current queue x sqrt(existing points / (existing points + new points)). Doubling capacity cuts the queue by about 29%, not 50%.",
+    "State populations are projections from Census 2011 and are used only to compute what share of a state each modelled city represents."
+  ],
+  "limitations": [
+    "India does not publish charging-station or EV-registration data at city level. Every charging and registration figure shown for a city is a state total distributed by model, tagged modelled on the row. Nothing here should be used for an actual investment decision.",
+    "Whether India has a public charging deficit turns on two unmeasured quantities, and they enter the arithmetic as a product: the electric three-wheeler fleet count times that fleet's public-charging share. A threshold on either one bounds a single slice and says nothing about the corner where both sit low. National demand and supply balance at a fleet-times-share product of roughly 713,000. At the central fleet estimate break-even needs a 38% public share, well below the 70% default; at the December 2022 fleet floor it needs 78%, above it. The deficit holds across the plausible range and reverses only if the fleet sat at its floor and the public share is roughly half the assumed value at the same time. That corner is unlikely — fifteen months of growth did happen, and 70% is if anything conservative for a fleet Vahan records as 99.9% commercial — but it is live rather than closed, and the sign table above marks it.",
+    "The three-wheeler fleet count carries a two-fold ambiguity. The class-split table is a snapshot at 07 December 2022 (919,025 three-wheelers) while the stock table runs to FY2023-24 (3.64 million EVs of all classes), so applying the older shares to the newer level assumes a mix that has since moved toward two-wheelers. Holding the public share at its 70% default, national demand crosses supply at about 1,019,000 three-wheelers — some 100,000 above the December 2022 measurement, or 5.4% of the 1.84 million vehicles added since. That settles the fleet question at that share and only at that share; the sign table is what settles it jointly.",
+    "Battery swapping is invisible to both sides of the ledger. The Ministry counts charging stations, not swap stations, and OpenStreetMap has no dedicated swap-station objects in India at all — only 24 charging stations tagged as also swapping. Swap infrastructure serves exactly the three-wheeler fleet that dominates modelled demand. Closing the national deficit through swapping alone would require roughly 11,000 to 33,000 swap stations depending on throughput, against a public charging estate of 25,852, so it is likely material at the margin rather than an explanation for the result.",
+    "Buses are included at a 10% public share because they overwhelmingly charge at private depots. Depot charging is real consumption served by infrastructure this model does not count.",
+    "Telangana appears in none of the Vahan tables, because it does not report through Vahan4. Its five cities, including Hyderabad, carry an imputed state total derived from the median EVs-per-lakh of the states that do report, and are tagged imputed rather than modelled.",
+    "OpenStreetMap holds 657 charging stations for all of India against the Ministry's 25,852 — roughly 2.5% coverage. Only 41 of the 100 modelled cities have a single mapped station, so for the other 59 the intra-state split falls back entirely to population. The points-per-station and DC-fast shares rest on 133 and 28 tagged stations respectively.",
+    "The registration stock, the class breakdown and the growth series are three different vintages of Vahan data. Their shares are consistent enough to combine, but the absolute totals do not reconcile with one another.",
+    "Cities are modelled as points. Real siting decisions happen at the corridor, ward and grid-substation level, where land availability and transformer capacity usually bind before city-level demand does.",
+    "Grid capacity, land cost, electricity tariffs and distribution-company readiness are not modelled, and any one of them can make a high-priority city undeliverable.",
+    "The priority score has no fitted weights and no multipliers — it is the unmet energy itself. What remains a judgement call is everything feeding it: the duty cycles, the public shares, the 20% utilisation applied to installed capacity, and the urban share that splits state totals into cities. Different values there produce a different ranking, which is why the public shares are exposed as live controls rather than buried."
+  ]
+}
