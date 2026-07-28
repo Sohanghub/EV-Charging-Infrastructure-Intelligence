@@ -16,6 +16,8 @@ import {
   SLIDER_STEP_STATIONS,
 } from "../lib/constants.ts";
 import { allocateStations, summarizeImpact } from "../lib/allocation.ts";
+import { buildExport, metricRows } from "../lib/export.ts";
+import { METRICS } from "../lib/metrics.ts";
 import {
   crossoverLabel,
   crossoverYear,
@@ -268,4 +270,38 @@ assert.equal(
 );
 assert.equal(crossoverLabel({ ...base, total_kw: 1 }), "Already short");
 
-console.log("check: dataset, scoring and allocation OK");
+/* -- export --------------------------------------------------------------- */
+
+// The plotted value is produced by a `dataKey` accessor Recharts never writes
+// back to the city, so an export that omits it silently loses the chart.
+const growth = METRICS.growth_score;
+const shrinking = scoreCity({ ...base, ev_growth_rate: -0.08 });
+const [shrinkingRow] = metricRows([shrinking], growth);
+assert.equal(shrinkingRow.value, 0, "the bar is the clamped score");
+assert.ok(
+  shrinkingRow.display.startsWith("-"),
+  "the label is the raw rate — they diverge where clamping bites"
+);
+
+// The export must carry the parameters that produced it, unchanged.
+const shares = { ...PUBLIC_SHARE_DEFAULTS, ev_3w: 0.35 };
+const payload = buildExport("top-priority-score", { shares, state: "all" }, []);
+assert.deepEqual(payload.params.shares, shares, "slider values must survive verbatim");
+assert.ok(Number.isFinite(Date.parse(payload.generated_at)));
+
+// Moving a slider must move the exported numbers, or the params are decoration.
+const atDefaults = metricRows(
+  rankByPriority(cities.map((c) => scoreCity(c))).slice(0, 10),
+  METRICS.priority_score
+);
+const atLowShare = metricRows(
+  rankByPriority(cities.map((c) => scoreCity(c, shares))).slice(0, 10),
+  METRICS.priority_score
+);
+assert.notDeepEqual(
+  atDefaults.map((r) => r.value),
+  atLowShare.map((r) => r.value),
+  "the same chart at different shares must export different rows"
+);
+
+console.log("check: dataset, scoring, allocation and export OK");

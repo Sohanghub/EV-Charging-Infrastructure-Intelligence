@@ -91,7 +91,13 @@ export function ExploreView({
           fitToCities
           height="h-[420px] lg:h-[604px]"
         />
-        <InfrastructureCharts cities={cities} metric={metric} onSelect={setSelected} />
+        <InfrastructureCharts
+          cities={cities}
+          metric={metric}
+          shares={shares}
+          state={state}
+          onSelect={setSelected}
+        />
       </div>
 
       <section className="space-y-4">

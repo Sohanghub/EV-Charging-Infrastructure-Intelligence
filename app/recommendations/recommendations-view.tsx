@@ -93,8 +93,8 @@ export function RecommendationsView({ cities }: { cities: ScoredCity[] }) {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
-        <AllocationChart allocations={allocations} />
-        <GapAnalysisChart allocations={allocations} />
+        <AllocationChart allocations={allocations} stations={stations} />
+        <GapAnalysisChart allocations={allocations} stations={stations} />
       </section>
 
       <section className="space-y-4">

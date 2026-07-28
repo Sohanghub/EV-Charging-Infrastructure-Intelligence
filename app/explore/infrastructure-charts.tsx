@@ -18,24 +18,32 @@ import {
 
 import { ChartFrame } from "@/components/charts/chart-frame";
 import { AXIS_PROPS, ChartTooltip, GRID_PROPS } from "@/components/charts/chart-tooltip";
+import { ExportButton } from "@/components/charts/export-button";
 import { quantileScale } from "@/lib/color-scale";
 import {
   CHARGERS_PER_1000_BENCHMARK,
   SEVERITY_COLORS,
 } from "@/lib/constants";
+import { buildExport, coverageRows, metricRows } from "@/lib/export";
 import { formatCompact, formatDecimal, formatNumber } from "@/lib/format";
 import { displayMetric, METRICS, type MetricKey } from "@/lib/metrics";
-import type { ScoredCity } from "@/lib/types";
+import type { PublicShares, ScoredCity } from "@/lib/types";
 
 const TOP_N = 10;
 
 export function InfrastructureCharts({
   cities,
   metric: metricKey,
+  shares,
+  state,
   onSelect,
 }: {
   cities: readonly ScoredCity[];
   metric: MetricKey;
+  /** Live slider values. Exported with the rows — the numbers are meaningless without them. */
+  shares: PublicShares;
+  /** Active state filter, or `"all"`. Also sets the colour scale's domain. */
+  state: string;
   onSelect?: (city: ScoredCity) => void;
 }) {
   const metric = METRICS[metricKey];
@@ -63,6 +71,17 @@ export function InfrastructureCharts({
       <ChartFrame
         title="Coverage against demand"
         description={`Every city plotted by fleet size and coverage. The line is the benchmark of ${CHARGERS_PER_1000_BENCHMARK} points per 1,000 EVs — everything below it is under-served.`}
+        action={
+          <ExportButton
+            payload={() =>
+              buildExport(
+                "coverage",
+                { shares, state, benchmark_per_1000_ev: CHARGERS_PER_1000_BENCHMARK },
+                coverageRows(cities)
+              )
+            }
+          />
+        }
       >
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart margin={{ top: 8, right: 12, bottom: 4, left: -8 }}>
@@ -138,6 +157,18 @@ export function InfrastructureCharts({
       <ChartFrame
         title={`Top ${Math.min(TOP_N, top.length)} cities — ${metric.label.toLowerCase()}`}
         description={metric.description}
+        action={
+          <ExportButton
+            payload={() =>
+              // `top` is reversed for display, so the file is highest-first.
+              buildExport(
+                `top-${metric.key.replace(/_/g, "-")}`,
+                { shares, state, metric: metric.key, metric_label: metric.label },
+                metricRows([...top].reverse(), metric)
+              )
+            }
+          />
+        }
       >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

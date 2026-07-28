@@ -13,7 +13,9 @@ import {
 
 import { ChartFrame } from "@/components/charts/chart-frame";
 import { AXIS_PROPS, ChartTooltip, GRID_PROPS } from "@/components/charts/chart-tooltip";
+import { ExportButton } from "@/components/charts/export-button";
 import { PALETTE } from "@/lib/constants";
+import { buildExport } from "@/lib/export";
 import { formatCompact, formatNumber, formatPercent } from "@/lib/format";
 import type { Allocation } from "@/lib/types";
 
@@ -23,9 +25,16 @@ const LEGEND_PROPS = {
   iconSize: 8,
 } as const;
 
+/**
+ * Both charts take `stations` purely to record it in the export. The allocation
+ * is a function of the slider, so rows without it cannot be reproduced.
+ */
+type ChartProps = { allocations: Allocation[]; stations: number };
+
 /** Where the funded charging points land, on top of what each city already has. */
-export function AllocationChart({ allocations }: { allocations: Allocation[] }) {
+export function AllocationChart({ allocations, stations }: ChartProps) {
   const data = allocations.map((a) => ({
+    id: a.city.id,
     city: a.city.city,
     state: a.city.state,
     existing: a.city.public_chargers,
@@ -38,6 +47,13 @@ export function AllocationChart({ allocations }: { allocations: Allocation[] }) 
       title="Where the charging points go"
       description="Funded points stacked on the capacity each city already has."
       height="h-[30rem]"
+      action={
+        <ExportButton
+          payload={() =>
+            buildExport("allocation", { stations, pool_size: allocations.length }, data)
+          }
+        />
+      }
     >
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
@@ -97,8 +113,9 @@ export function AllocationChart({ allocations }: { allocations: Allocation[] }) 
 }
 
 /** The energy shortfall in kWh/day, before and after the same investment. */
-export function GapAnalysisChart({ allocations }: { allocations: Allocation[] }) {
+export function GapAnalysisChart({ allocations, stations }: ChartProps) {
   const data = allocations.map((a) => ({
+    id: a.city.id,
     city: a.city.city,
     state: a.city.state,
     before: Math.round(Math.max(0, a.city.deficit_kwh_day)),
@@ -111,6 +128,13 @@ export function GapAnalysisChart({ allocations }: { allocations: Allocation[] })
       title="Energy shortfall, before and after"
       description="Unmet public charging demand in kWh/day, against the same demand once the funded stations are delivering."
       height="h-[30rem]"
+      action={
+        <ExportButton
+          payload={() =>
+            buildExport("gap-analysis", { stations, pool_size: allocations.length }, data)
+          }
+        />
+      }
     >
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
