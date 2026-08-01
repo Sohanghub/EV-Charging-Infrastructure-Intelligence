@@ -7,13 +7,17 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
 import {
+  AC_POINTS_PER_STATION,
   CHARGING_POINTS_PER_STATION,
   DAILY_KWH,
+  FAST_POINTS_PER_STATION,
   PUBLIC_SHARE_DEFAULTS,
   RECOMMENDATION_POOL_SIZE,
   SLIDER_MAX_STATIONS,
   SLIDER_MIN_STATIONS,
   SLIDER_STEP_STATIONS,
+  STATION_AC_KW,
+  STATION_DC_KW,
 } from "../lib/constants.ts";
 import { allocateStations, summarizeImpact } from "../lib/allocation.ts";
 import { buildExport, metricRows } from "../lib/export.ts";
@@ -142,6 +146,16 @@ assert.ok(
 // Supply is capacity, not point count: two AC points != one DC point.
 assert.equal(supplyKwhDay({ ...base, total_kw: 100 }), 100 * 24 * 0.2);
 
+// The claim the kW pricing rests on: the DC pair carries the overwhelming
+// majority of a station's capacity, so a build priced in points would be wrong
+// by an order of magnitude. Asserted against the constants rather than assumed.
+const stationKw =
+  FAST_POINTS_PER_STATION * STATION_DC_KW + AC_POINTS_PER_STATION * STATION_AC_KW;
+assert.ok(
+  (FAST_POINTS_PER_STATION * STATION_DC_KW) / stationKw > 0.9,
+  "the DC points must carry the bulk of a funded station's capacity"
+);
+
 /* -- sign table ----------------------------------------------------------- */
 
 // The national deficit is a claim about a product, fleet x share, so the grid
@@ -219,9 +233,14 @@ for (let total = SLIDER_MIN_STATIONS; total <= SLIDER_MAX_STATIONS; total += SLI
   );
   // A funded station is 2 DC + 2 AC, and the DC pair carries ~95% of its
   // capacity. Counting points rather than kW would misprice a build badly.
+  // The rates come from the constants rather than restated literals — build-cities
+  // is what pins those constants to the OSM medians they claim to match.
   assert.ok(
     allocations.every(
-      (a) => Math.abs(a.added_kw - (a.fast_points * 60 + a.ac_points * 3.3)) < 1e-9
+      (a) =>
+        Math.abs(
+          a.added_kw - (a.fast_points * STATION_DC_KW + a.ac_points * STATION_AC_KW)
+        ) < 1e-9
     ),
     `added capacity is priced by point type at ${total}`
   );

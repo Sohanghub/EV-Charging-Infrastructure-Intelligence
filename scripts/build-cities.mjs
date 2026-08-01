@@ -23,6 +23,8 @@ import {
   DAILY_KWH,
   HOURS_PER_DAY,
   PUBLIC_SHARE_DEFAULTS,
+  STATION_AC_KW,
+  STATION_DC_KW,
 } from "../lib/constants.ts";
 
 const raw = (name) =>
@@ -162,7 +164,6 @@ const STATES = [
 /* Source lookup                                                               */
 /* -------------------------------------------------------------------------- */
 
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 const round = (v, digits = 0) => Number(v.toFixed(digits));
 const sum = (xs) => xs.reduce((a, b) => a + b, 0);
 
@@ -325,6 +326,29 @@ function powerRatings() {
 
 const POINTS_PER_STATION = pointsPerStation();
 const FAST = powerRatings();
+
+/**
+ * The existing estate is priced from these OSM medians; a funded station is
+ * priced from STATION_DC_KW / STATION_AC_KW in lib/constants.ts. Those are the
+ * same two numbers, and nothing but this check keeps them that way — the medians
+ * rest on n=6 DC and n=22 AC sockets, so a re-fetch can move them. If it does,
+ * existing and funded capacity would silently end up on different scales, which
+ * is the error the whole kW-rather-than-points model exists to avoid.
+ *
+ * Failing here is the point: it forces a human to reconcile rather than letting
+ * the drift through. Update lib/constants.ts to the new medians, then re-run.
+ */
+for (const [label, derived, constant] of [
+  ["DC", FAST.dcKw, STATION_DC_KW],
+  ["AC", FAST.acKw, STATION_AC_KW],
+]) {
+  if (derived !== constant)
+    throw new Error(
+      `${label} point rating drifted: OSM median is ${derived} kW but lib/constants.ts ` +
+        `says ${constant} kW. Existing supply would be priced differently from funded ` +
+        `supply. Update the constant to ${derived} and re-run.`
+    );
+}
 
 /** Nearest modelled city within CITY_RADIUS_KM, or null for the rural remainder. */
 const allCities = STATES.flatMap((s) => s.cities.map(([city, lat, lng]) => ({ city, lat, lng })));

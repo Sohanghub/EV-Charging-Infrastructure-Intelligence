@@ -33,7 +33,9 @@ export function ExportButton({
         link.href = url;
         link.download = `evip-${data.chart}-${data.generated_at.slice(0, 10)}.json`;
         link.click();
-        URL.revokeObjectURL(url);
+        // Revoking in the same tick races the download and some browsers cancel
+        // it. One turn of the event loop is enough for the fetch to be issued.
+        setTimeout(() => URL.revokeObjectURL(url), 0);
       }}
     >
       <Download />

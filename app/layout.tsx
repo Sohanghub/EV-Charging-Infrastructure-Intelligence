@@ -11,8 +11,8 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "sw
 
 export const metadata: Metadata = {
   title: {
-    default: "ECII — EV Charging Infrastructure Intelligence",
-    template: "%s · ECII",
+    default: "EVIP — EV Charging Infrastructure Intelligence",
+    template: "%s · EVIP",
   },
   description:
     "A geospatial decision-support platform for deciding where India's next public EV charging stations should be built.",

@@ -1,10 +1,10 @@
 {
-  "name": "ecii",
+  "name": "evip",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check.mjs",

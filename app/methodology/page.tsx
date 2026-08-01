@@ -26,7 +26,7 @@ import type { Methodology } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Methodology",
   description:
-    "The benchmarks, scoring weights, allocation algorithm, impact assumptions and limitations behind every number in ECII.",
+    "The benchmarks, scoring weights, allocation algorithm, impact assumptions and limitations behind every number in EVIP.",
 };
 
 const { data_sources, definitions, scoring_weights, assumptions, limitations } =

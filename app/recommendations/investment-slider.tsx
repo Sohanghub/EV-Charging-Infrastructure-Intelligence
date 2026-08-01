@@ -7,6 +7,7 @@ import {
   SLIDER_STEP_STATIONS,
 } from "@/lib/constants";
 import { formatNumber } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 const TICKS = [25, 250, 500, 750, 1000];
 
@@ -51,7 +52,7 @@ export function InvestmentSlider({
         onChange={(event) => onChange(Number(event.target.value))}
         list="investment-ticks"
         aria-valuetext={`${stations} stations, ${points} charging points`}
-        className="mt-4 h-2 w-full cursor-pointer appearance-none rounded-full bg-muted accent-chart-2"
+        className="range-input mt-4"
       />
       <datalist id="investment-ticks">
         {TICKS.map((tick) => (
@@ -59,13 +60,20 @@ export function InvestmentSlider({
         ))}
       </datalist>
 
-      <div className="mt-2 flex justify-between text-xs text-muted-foreground tabular-nums">
+      <div className="mt-1 flex justify-between text-xs tabular-nums">
         {TICKS.map((tick) => (
           <button
             key={tick}
             type="button"
             onClick={() => onChange(tick)}
-            className="rounded-sm px-1 transition-colors hover:text-foreground"
+            aria-label={`Set budget to ${formatNumber(tick)} stations`}
+            aria-pressed={stations === tick}
+            /* py-1.5 lifts these off the 20px they sat at, so the shortcut is a
+               real target rather than a caption that happens to be clickable. */
+            className={cn(
+              "rounded-md px-2 py-1.5 transition-colors hover:bg-muted hover:text-foreground",
+              stations === tick ? "font-medium text-foreground" : "text-muted-foreground"
+            )}
           >
             {tick}
           </button>

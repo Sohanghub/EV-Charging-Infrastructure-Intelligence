@@ -182,3 +182,112 @@
 .leaflet-popup-close-button {
   color: var(--muted-foreground) !important;
 }
+
+/* Marker hover labels. Leaflet's default is a white box with #222 text and a
+   hard black shadow, which reads as a foreign element in dark mode — and the
+   muted-foreground inside it resolves against the page theme, so on the default
+   white it came out light grey on white. Themed with the same popover tokens as
+   every other floating surface. */
+/* Scoped under .leaflet-container so it outranks leaflet.css, which Next emits
+   after globals.css because the canvas imports it at module level. */
+.leaflet-container .leaflet-tooltip {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px oklch(0 0 0 / 10%);
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* The callout arrow has to be recoloured per direction or it stays white. */
+.leaflet-container .leaflet-tooltip-top::before {
+  border-top-color: var(--border);
+}
+.leaflet-container .leaflet-tooltip-bottom::before {
+  border-bottom-color: var(--border);
+}
+.leaflet-container .leaflet-tooltip-left::before {
+  border-left-color: var(--border);
+}
+.leaflet-container .leaflet-tooltip-right::before {
+  border-right-color: var(--border);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Range inputs — the primary control of the whole application                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Both sliders share this. The public-share sliders previously shipped as bare
+ * 16px browser defaults with `cursor: default`, while the investment slider had
+ * its own custom track — two different controls doing the same job. A range
+ * input is still the right element: keyboard operable and announced for free.
+ */
+.range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  /* 24px of pointer height around a 6px track, so the grab area clears the
+     WCAG target minimum without making the track look heavy. */
+  height: 1.5rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range-input::-webkit-slider-runnable-track {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  /* (track height + borders - thumb) / 2, to sit centred on the track. */
+  margin-top: -0.3125rem;
+  border-radius: 9999px;
+  background: var(--chart-2);
+  border: 2px solid var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+  transition: transform 120ms ease;
+}
+
+.range-input:hover::-webkit-slider-thumb,
+.range-input:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+.range-input::-moz-range-track {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.range-input::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background: var(--chart-2);
+  border: 2px solid var(--background);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+/* The thumb is the control; the input box itself is not a meaningful outline. */
+.range-input:focus {
+  outline: none;
+}
+.range-input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.range-input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

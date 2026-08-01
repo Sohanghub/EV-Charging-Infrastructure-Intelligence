@@ -29,7 +29,7 @@ export function PriorityTable({ allocations }: { allocations: Allocation[] }) {
       <Table>
         <caption className="sr-only">
           The fifteen highest-priority cities, the stations allocated to each, and the
-          modelled effect on their capacity gap and peak queue.
+          modelled effect on their energy deficit.
         </caption>
         <TableHeader className="[&_th]:bg-card">
           <TableRow>
@@ -51,13 +51,18 @@ export function PriorityTable({ allocations }: { allocations: Allocation[] }) {
             >
               New points
             </TableHead>
-            <TableHead data-numeric title="Charging points short of benchmark">
+            <TableHead data-numeric title="Unmet public charging energy today, kWh/day">
               Gap before
             </TableHead>
-            <TableHead data-numeric>Gap after</TableHead>
+            <TableHead
+              data-numeric
+              title="Unmet energy still outstanding after the funded build, kWh/day"
+            >
+              Gap after
+            </TableHead>
             <TableHead data-numeric>Closed</TableHead>
-            <TableHead data-numeric title="Modelled peak-hour queue">
-              Queue
+            <TableHead data-numeric title="Years until demand overtakes installed supply">
+              Crossover
             </TableHead>
           </TableRow>
         </TableHeader>

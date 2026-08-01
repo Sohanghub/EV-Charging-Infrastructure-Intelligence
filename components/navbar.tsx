@@ -16,10 +16,10 @@ export function Navbar() {
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6">
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 rounded-sm text-sm font-semibold tracking-tight"
+          className="-my-1 flex shrink-0 items-center gap-2 rounded-md py-1 text-sm font-semibold tracking-tight"
         >
           <Zap className="size-4 text-chart-2" aria-hidden />
-          ECII
+          EVIP
           <span className="hidden font-normal text-muted-foreground lg:inline">
             EV Charging Infrastructure Intelligence
           </span>

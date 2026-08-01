@@ -7,7 +7,15 @@
 /* Infrastructure units                                                        */
 /* -------------------------------------------------------------------------- */
 
-/** A funded station is a fixed 4-point site: 2 DC fast + 2 AC. */
+/**
+ * A funded station is a fixed 4-point site: 2 DC fast + 2 AC.
+ *
+ * Note this is not the size of an *existing* station. `scripts/build-cities.mjs`
+ * converts the Ministry's station counts at the observed OSM median of 2 points
+ * per station, so a funded station is deliberately twice the size of the average
+ * one already installed — a designed site rather than the current median. The
+ * two are only ever compared in kW, never as station counts.
+ */
 export const CHARGING_POINTS_PER_STATION = 4;
 export const FAST_POINTS_PER_STATION = 2;
 export const AC_POINTS_PER_STATION = 2;
@@ -117,26 +125,16 @@ export const THREE_WHEELER_BREAKEVEN_KWH = 1.99;
 /** Horizon for the demand projection, in years. */
 export const PROJECTION_YEARS = 10;
 
-/** Utilization at which a network is considered saturated. */
-export const SATURATION_UTILIZATION = 0.8;
-
 /* -------------------------------------------------------------------------- */
 /* Scoring                                                                     */
 /* -------------------------------------------------------------------------- */
 
-/** YoY EV growth that earns a full growth score. */
+/**
+ * YoY EV growth that earns a full growth score. The only scoring tunable left:
+ * the queue, density and population multipliers are gone along with the
+ * fabricated fields they read, and `scripts/check.mjs` asserts they stay gone.
+ */
 export const MAX_GROWTH_RATE = 0.6;
-
-/** Peak queue length (minutes) at which the queue multiplier maxes out. */
-export const QUEUE_SATURATION_MINUTES = 30;
-
-/** City size (lakhs) at which the population multiplier maxes out. */
-export const POPULATION_REFERENCE_LAKHS = 200;
-
-/** Multiplier caps — every multiplier is bounded so scores cannot explode. */
-export const MAX_QUEUE_BONUS = 1; // queue_multiplier      <= 2.0
-export const MAX_DENSITY_BONUS = 1; // density_multiplier    <= 2.0
-export const MAX_POPULATION_BONUS = 0.5; // population_multiplier <= 1.5
 
 /* -------------------------------------------------------------------------- */
 /* Allocation                                                                  */

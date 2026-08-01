@@ -15,7 +15,6 @@ import {
 } from "react-leaflet";
 
 import { useStateFeatures } from "@/hooks/use-state-features";
-import { stateAggregate } from "@/lib/aggregate";
 import {
   INDIA_BOUNDS,
   MAP_MAX_ZOOM,
@@ -24,6 +23,7 @@ import {
   TILE_URLS,
 } from "@/lib/constants";
 import { markerRadius, quantileScale } from "@/lib/color-scale";
+import { rollUpByState } from "@/lib/scoring";
 import { displayMetric, METRICS } from "@/lib/metrics";
 import type { MapCanvasProps } from "./types";
 
@@ -61,8 +61,17 @@ export default function MapCanvas({
   );
   const features = useStateFeatures(visibleStates);
 
+  /**
+   * Rolled up from the cities actually plotted, not from a stored table. Those
+   * cities carry whatever the public-share sliders last produced, so boundary
+   * fill re-bands with the markers instead of staying frozen at the defaults.
+   * The state filter only ever selects whole states, so a state's group here is
+   * always all of its modelled cities.
+   */
+  const byState = useMemo(() => rollUpByState(cities), [cities]);
+
   const boundaryColor = (name: string) => {
-    const aggregate = stateAggregate(name);
+    const aggregate = byState.get(name);
     return aggregate ? scale.color(metric.stateValue(aggregate)) : undefined;
   };
 

@@ -1,10 +1,5 @@
 import { MAX_GROWTH_RATE } from "./constants.ts";
-import {
-  formatCompact,
-  formatDecimal,
-  formatNumber,
-  formatPercent,
-} from "./format.ts";
+import { formatCompact, formatDecimal, formatPercent } from "./format.ts";
 import { clamp } from "./scoring.ts";
 import type { ScoredCity, StateAggregate } from "./types.ts";
 

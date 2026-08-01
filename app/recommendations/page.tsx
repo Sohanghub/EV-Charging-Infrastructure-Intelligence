@@ -6,7 +6,7 @@ import { RecommendationsView } from "./recommendations-view";
 export const metadata: Metadata = {
   title: "Recommendations",
   description:
-    "Allocate a fixed number of new charging stations across India's highest-priority cities and see the modelled effect on the charger gap and peak waiting time.",
+    "Allocate a fixed number of new charging stations across India's highest-priority cities and see the modelled effect on their daily energy deficit.",
 };
 
 export default function RecommendationsPage() {

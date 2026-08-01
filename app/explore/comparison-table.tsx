@@ -85,7 +85,9 @@ export function ComparisonTable({
         <caption className="sr-only">
           Cities compared by demand, supply and priority. Column headers sort the table.
         </caption>
-        <TableHeader className="[&_th]:sticky [&_th]:top-0 [&_th]:z-10 [&_th]:bg-card">
+        {/* The header stays put while 100 rows scroll under it, so it needs its
+            own edge — with only a background the rows slid under it unbroken. */}
+        <TableHeader className="[&_th]:sticky [&_th]:top-0 [&_th]:z-10 [&_th]:border-b [&_th]:border-border [&_th]:bg-card">
           <TableRow>
             <SortableHead label="City" sortKey="city" sort={sort} onToggle={toggle} />
             <SortableHead label="State" sortKey="state" sort={sort} onToggle={toggle} />
@@ -117,9 +119,12 @@ export function ComparisonTable({
               onClick={() => onSelect(city)}
             >
               <TableCell className="font-medium">
+                {/* The row is clickable but a <tr> cannot take focus, so this is
+                    the keyboard route into the profile and has to be a real
+                    target rather than a 20px line of text. */}
                 <button
                   type="button"
-                  className="rounded-sm text-left underline-offset-4 hover:underline"
+                  className="-mx-1.5 -my-1 rounded-md px-1.5 py-1 text-left underline-offset-4 hover:underline"
                   onClick={(event) => {
                     event.stopPropagation();
                     onSelect(city);
@@ -186,8 +191,10 @@ function SortableHead({
         type="button"
         title={title}
         onClick={() => onToggle(sortKey)}
+        /* -my-1 keeps the row height unchanged while giving the control a 28px
+           target; at 20px it was under the 24px minimum. */
         className={cn(
-          "inline-flex items-center gap-1 rounded-sm transition-colors hover:text-foreground",
+          "-mx-1.5 -my-1 inline-flex items-center gap-1 rounded-md px-1.5 py-1 transition-colors hover:bg-muted hover:text-foreground",
           numeric && "flex-row-reverse",
           active ? "text-foreground" : "text-muted-foreground"
         )}

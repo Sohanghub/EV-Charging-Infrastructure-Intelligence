@@ -14,7 +14,7 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="National view"
             title="The shortfall is not spread evenly"
-            description="Colour shows how far a city sits from the one-per-250-EV benchmark. Circle size shows how many charging points it is short — the largest red circles are where investment buys the most relief."
+            description="Colour is demand as a multiple of deliverable supply — 1.0 is break-even. Circle size is the energy a city's fleet draws from public points each day, so the largest red circles are where investment buys the most relief."
           />
           {/* One IndiaMap, configured by props. Explore uses the same component. */}
           <IndiaMap

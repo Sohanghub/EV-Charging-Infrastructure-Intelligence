@@ -101,7 +101,7 @@ export function RecommendationsView({ cities }: { cities: ScoredCity[] }) {
         <SectionHeading
           as="h2"
           title="Full allocation"
-          description="The complete ranking with the modelled effect on each city's capacity gap and peak queue."
+          description="The complete ranking with the modelled effect on each city's energy deficit, and how long until demand overtakes supply."
         />
         <PriorityTable allocations={allocations} />
       </section>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
@@ -16,9 +17,25 @@ import type { IndiaMapProps } from "./types";
  * Leaflet reaches for `window` at import time, so the canvas is the only part
  * loaded client-side. Everything around it renders on the server.
  */
+/**
+ * The Leaflet bundle is the heaviest thing on the page, so the placeholder has
+ * to say something. A bare grey block reads as a broken image; this reads as
+ * work in progress and reserves the identical box, so nothing shifts when the
+ * canvas swaps in.
+ */
 const MapCanvas = dynamic(() => import("./map-canvas"), {
   ssr: false,
-  loading: () => <div className="size-full bg-muted" />,
+  loading: () => (
+    <div
+      className="flex size-full items-center justify-center bg-muted/50"
+      role="status"
+    >
+      <span className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Loader2 className="size-3.5 animate-spin" aria-hidden />
+        Loading map…
+      </span>
+    </div>
+  ),
 });
 
 export function IndiaMap({

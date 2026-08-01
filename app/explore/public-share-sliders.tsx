@@ -44,10 +44,26 @@ export function PublicShareSliders({
         {VEHICLE_CLASSES.map((klass) => {
           const draw = DAILY_KWH[klass] * shares[klass];
           return (
-            <div key={klass} className="grid grid-cols-[8.5rem_1fr_auto] items-center gap-3">
-              <label htmlFor={`share-${klass}`} className="text-xs text-muted-foreground">
+            /* Label above the track below 40rem: at the narrowest widths the
+               fixed label column squeezed the track to ~130px, which is 6px per
+               step on a 20-step control. */
+            <div
+              key={klass}
+              className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 sm:grid-cols-[8.5rem_1fr_auto]"
+            >
+              <label
+                htmlFor={`share-${klass}`}
+                className="text-xs text-muted-foreground"
+              >
                 {VEHICLE_CLASS_LABELS[klass]}
               </label>
+              <span className="text-right text-xs tabular-nums sm:col-start-3 sm:row-start-1 sm:w-28">
+                <span className="font-medium">{formatPercent(shares[klass])}</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  · {formatDecimal(draw, 2)} kWh
+                </span>
+              </span>
               <input
                 id={`share-${klass}`}
                 type="range"
@@ -58,15 +74,9 @@ export function PublicShareSliders({
                 onChange={(e) =>
                   onChange({ ...shares, [klass]: Number(e.target.value) })
                 }
-                className="accent-chart-2"
+                aria-valuetext={`${formatPercent(shares[klass])}, ${formatDecimal(draw, 2)} kWh per day per vehicle`}
+                className="range-input col-span-2 sm:col-span-1 sm:col-start-2 sm:row-start-1"
               />
-              <span className="w-28 text-right text-xs tabular-nums">
-                <span className="font-medium">{formatPercent(shares[klass])}</span>
-                <span className="text-muted-foreground">
-                  {" "}
-                  · {formatDecimal(draw, 2)} kWh
-                </span>
-              </span>
             </div>
           );
         })}

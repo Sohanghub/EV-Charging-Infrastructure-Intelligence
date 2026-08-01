@@ -9,9 +9,8 @@ import {
   SEVERITY_THRESHOLDS,
   VEHICLE_CLASSES,
   type Severity,
-  type VehicleClass,
 } from "./constants.ts";
-import type { City, PublicShares, ScoredCity } from "./types.ts";
+import type { City, PublicShares, ScoredCity, StateAggregate } from "./types.ts";
 
 /**
  * Pure derived metrics. No side effects, no rounding — full float precision is
@@ -164,5 +163,81 @@ export function rankByPriority<T extends ScoredCity>(cities: readonly T[]): T[] 
       b.priority_score - a.priority_score ||
       b.demand_kwh_day - a.demand_kwh_day ||
       a.city.localeCompare(b.city)
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* State roll-ups                                                             */
+/* -------------------------------------------------------------------------- */
+
+export const sumBy = <T>(items: readonly T[], of: (item: T) => number) =>
+  items.reduce((total, item) => total + of(item), 0);
+
+/** Weighted mean, guarding against an all-zero weight set. */
+const weightedMean = (
+  cities: readonly ScoredCity[],
+  of: (c: ScoredCity) => number,
+  by: (c: ScoredCity) => number
+) => {
+  const weight = sumBy(cities, by);
+  return weight > 0 ? sumBy(cities, (c) => of(c) * by(c)) / weight : 0;
+};
+
+/**
+ * Rolls a state's cities up into one record. Pure and share-agnostic: it reads
+ * whatever `scoreCity` already produced, so a set of cities scored at slider
+ * values rolls up at those slider values. Lives here rather than in
+ * `lib/aggregate.ts` so the map can call it without importing the dataset.
+ */
+export function aggregateCities(
+  state: string,
+  cities: readonly ScoredCity[]
+): StateAggregate {
+  const registered_ev = sumBy(cities, (c) => c.registered_ev);
+  const public_chargers = sumBy(cities, (c) => c.public_chargers);
+  const demand_kwh_day = sumBy(cities, (c) => c.demand_kwh_day);
+  const supply_kwh_day = sumBy(cities, (c) => c.supply_kwh_day);
+
+  // Aggregate the energy, then take the ratio — averaging city ratios would let
+  // a tiny city with almost no supply dominate a whole state's colour.
+  const deficit_ratio = supply_kwh_day > 0 ? demand_kwh_day / supply_kwh_day : Infinity;
+
+  return {
+    state,
+    state_code: cities[0].state_code,
+    cities: cities.length,
+    population_lakhs: sumBy(cities, (c) => c.population_lakhs),
+    registered_ev,
+    public_chargers,
+    fast_chargers: sumBy(cities, (c) => c.fast_chargers),
+    total_kw: sumBy(cities, (c) => c.total_kw),
+    chargers_per_1000_ev: public_chargers / (registered_ev / 1000),
+    ev_growth_rate: weightedMean(cities, (c) => c.ev_growth_rate, (c) => c.registered_ev),
+    demand_kwh_day,
+    supply_kwh_day,
+    deficit_kwh_day: demand_kwh_day - supply_kwh_day,
+    deficit_ratio,
+    priority_score: sumBy(cities, (c) => c.priority_score),
+    severity: severityOf(deficit_ratio),
+  };
+}
+
+/**
+ * Every state present in `cities`, rolled up and keyed by name. Derived from the
+ * cities handed in rather than from the dataset, so a choropleth drawn from it
+ * moves with the public-share sliders exactly as the markers do.
+ */
+export function rollUpByState(
+  cities: readonly ScoredCity[]
+): Map<string, StateAggregate> {
+  const byState = new Map<string, ScoredCity[]>();
+  for (const c of cities) {
+    const group = byState.get(c.state);
+    if (group) group.push(c);
+    else byState.set(c.state, [c]);
+  }
+
+  return new Map(
+    [...byState].map(([state, group]) => [state, aggregateCities(state, group)])
   );
 }

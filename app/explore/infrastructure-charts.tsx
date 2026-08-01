@@ -103,7 +103,10 @@ export function InfrastructureCharts({
               width={44}
               tickFormatter={(v: number) => formatDecimal(v, 0)}
             />
-            <ZAxis type="number" dataKey="capacity_gap" range={[24, 240]} />
+            {/* Point size is the unmet energy. `priority_score` is already floored
+                at zero, so cities in surplus stay at the smallest radius rather
+                than inverting the scale with a negative deficit. */}
+            <ZAxis type="number" dataKey="priority_score" range={[24, 240]} />
             <ReferenceLine
               y={CHARGERS_PER_1000_BENCHMARK}
               stroke="var(--muted-foreground)"

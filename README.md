@@ -176,6 +176,13 @@ Set a budget between 25 and 1,000 stations. Each station is a fixed 4-point site
 DC pair carries ~95% of a station's capacity, so impact is priced in kW and never in point
 counts.
 
+**A funded station is not the same size as an existing one.** The Ministry's installed station
+counts are converted to charging points at the observed OSM median of **2 points per station**;
+a funded station is a designed **4-point** site. So 250 funded stations are not comparable to
+250 of the 25,852 already installed, and the two are only ever compared in kW. The build fails
+if the OSM medians drift away from the rates in [lib/constants.ts](lib/constants.ts), which is
+the one place those rates are allowed to be stated.
+
 Stations go to the fifteen highest-priority cities by the **largest-remainder method** with a
 floor of one station each, so allocations are whole numbers and always sum to exactly the budget.
 

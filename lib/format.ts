@@ -18,19 +18,8 @@ export const formatCompact = (value: number) => compact.format(value);
 /** Decimal rate -> whole percent. `0.62` -> `"62%"` */
 export const formatPercent = (rate: number) => `${Math.round(rate * 100)}%`;
 
-/** Already-whole percent -> `"62%"`. For values that never were decimals. */
-export const formatPercentPoints = (points: number) => `${Math.round(points)}%`;
-
 /** Scores and rates -> one decimal. `4.27` -> `"4.3"` */
 export const formatDecimal = (value: number, digits = 1) => value.toFixed(digits);
 
-export const formatMinutes = (minutes: number) => `${Math.round(minutes)} min`;
-
 /** `12.5` -> `"12.5L"` people. */
 export const formatPopulation = (lakhs: number) => `${formatDecimal(lakhs)}L`;
-
-export const formatStations = (stations: number) =>
-  `${formatNumber(stations)} ${stations === 1 ? "station" : "stations"}`;
-
-export const formatPoints = (points: number) =>
-  `${formatNumber(points)} charging ${points === 1 ? "point" : "points"}`;
